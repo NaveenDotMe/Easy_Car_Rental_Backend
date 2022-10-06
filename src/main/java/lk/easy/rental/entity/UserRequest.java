@@ -1,0 +1,37 @@
+package lk.easy.rental.entity;
+
+import lk.easy.rental.enums.Role;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import javax.persistence.*;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@ToString
+@Entity
+public class UserRequest {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int userId;
+    @Column(name = "user_name")
+    private String userName;
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public UserRequest(String userName, String password, Role role) {
+        this.userName = userName;
+        this.password = password;
+        this.role = role;
+    }
+
+    public UserRequest(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
+}

@@ -1,0 +1,61 @@
+package lk.easy.rental.controller;
+
+import lk.easy.rental.embeded.PriceRate;
+import lk.easy.rental.enums.FuelType;
+import lk.easy.rental.enums.TransmissionType;
+import lk.easy.rental.enums.VehicleType;
+import lk.easy.rental.service.BrowseService;
+import lk.easy.rental.util.ResponseUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+@RestController
+@RequestMapping("api/v1/browse")
+@CrossOrigin
+public class BrowseController {
+
+    @Autowired
+    BrowseService browseService;
+
+    @GetMapping(params = {"noOfPassenger"})
+    public ResponseUtil sortVehicleNoOfPassenger(@RequestParam int noOfPassenger) {
+        return new ResponseUtil(201, "OK", browseService.getAllNoOfPassenger(noOfPassenger));
+    }
+
+    @GetMapping(params = {"fuelType"})
+    public ResponseUtil sortVehicleFuelType(@RequestParam FuelType fuelType) {
+        return new ResponseUtil(201, "OK", browseService.getAllFuelType(fuelType));
+    }
+
+    @GetMapping(params = {"priceRate"})
+    public ResponseUtil sortVehiclePriceRate(@RequestParam PriceRate priceRate) {
+        return new ResponseUtil(201, "OK", browseService.getPriceRate(priceRate));
+    }
+
+    @GetMapping(params = "brand")
+    public ResponseUtil sortVehicleByBrand(@RequestParam String brand){
+        return new ResponseUtil(200,"OK", browseService.getVehicleByBrand(brand));
+    }
+
+    @GetMapping(params = "type")
+    public ResponseUtil sortVehicleByType(@RequestParam VehicleType type){
+        return new ResponseUtil(200,"OK", browseService.getVehicleByType(type));
+    }
+
+    @GetMapping(params = "transmissionType")
+    public ResponseUtil sortVehicleByTransmissionType(@RequestParam TransmissionType transmissionType){
+        return new ResponseUtil(200,"OK", browseService.getVehicleByTransmissionType(transmissionType));
+    }
+
+    @GetMapping(params = {"pickUpDate", "returnDate"})
+    public ResponseUtil loadAvailableVehicles(@RequestParam String pickUpDate, @RequestParam String returnDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate pickUp = LocalDate.parse(pickUpDate);
+        LocalDate dropOff = LocalDate.parse(returnDate, formatter);
+        return new ResponseUtil(200, "OK", browseService.loadAvailableVehicles(pickUp, dropOff));
+
+    }
+}

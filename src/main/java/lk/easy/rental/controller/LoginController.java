@@ -1,0 +1,42 @@
+package lk.easy.rental.controller;
+
+import lk.easy.rental.dto.CustomerDTO;
+import lk.easy.rental.dto.DriverDTO;
+import lk.easy.rental.dto.UserDTO;
+import lk.easy.rental.jwt.AuthenticationRequest;
+import lk.easy.rental.service.CustomerService;
+import lk.easy.rental.service.LoginService;
+import lk.easy.rental.service.UserService;
+import lk.easy.rental.util.ResponseUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+
+@RestController
+@RequestMapping("api/v1/login")
+@CrossOrigin
+public class LoginController {
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    LoginService loginService;
+
+//    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<?> logInUser(@RequestBody AuthenticationRequest authenticationRequest, Principal principal){
+//        ResponseEntity<?> responseEntity = userService.logInUser(authenticationRequest);
+//        return responseEntity;
+//    }
+
+    @GetMapping(params = {"userName","password"})
+    public ResponseUtil getUser(@RequestParam String userName, @RequestParam String password){
+        UserDTO dto = loginService.loginUser(userName,password);
+        return new ResponseUtil(200,"Saved",dto);
+    }
+
+}
